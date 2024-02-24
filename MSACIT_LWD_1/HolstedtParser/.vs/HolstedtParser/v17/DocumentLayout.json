@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Uni\\MSACIT\\MSACIT_LWD_1\\HolstedtParser\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{9206345E-744B-4CCA-99C3-E216894E2B1C}|HolstedtParser\\HolstedtParser.vcxproj|D:\\Uni\\MSACIT\\MSACIT_LWD_1\\HolstedtParser\\HolstedtParser\\HolstedtParser.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9206345E-744B-4CCA-99C3-E216894E2B1C}|HolstedtParser\\HolstedtParser.vcxproj|solutionrelative:HolstedtParser\\HolstedtParser.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "HolstedtParser.cpp",
+              "DocumentMoniker": "D:\\Uni\\MSACIT\\MSACIT_LWD_1\\HolstedtParser\\HolstedtParser\\HolstedtParser.cpp",
+              "RelativeDocumentMoniker": "HolstedtParser\\HolstedtParser.cpp",
+              "ToolTip": "D:\\Uni\\MSACIT\\MSACIT_LWD_1\\HolstedtParser\\HolstedtParser\\HolstedtParser.cpp",
+              "RelativeToolTip": "HolstedtParser\\HolstedtParser.cpp",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAlwFYAAAAhAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-02-24T15:16:52.059Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
