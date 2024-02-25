@@ -80,7 +80,7 @@ std::vector<double> countMetrics(std::vector<std::map<std::string, int>> dicts)
 
 
 int main() {
-    std::string filePath = "D:\\Uni\\MSACIT\\MSACIT_LWD_1\\example.php";
+    std::string filePath = "C:\\Users\\dzmitry\\source\\repos\\4sem\\Metrology\\Lab1\\Metrology\\MSACIT_LWD_1\\example.php";
   
     const auto dicts = parse(filePath);
     const auto metrics = countMetrics(dicts);
