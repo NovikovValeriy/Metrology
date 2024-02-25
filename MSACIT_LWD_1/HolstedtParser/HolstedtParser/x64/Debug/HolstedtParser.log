@@ -1,4 +1,3 @@
 ﻿  HolstedtParser.cpp
-D:\Uni\MSACIT\MSACIT_LWD_1\HolstedtParser\HolstedtParser\HolstedtParser.cpp(53,26): warning C4244: инициализация: преобразование "__int64" в "double", возможна потеря данных
-D:\Uni\MSACIT\MSACIT_LWD_1\HolstedtParser\HolstedtParser\HolstedtParser.cpp(54,27): warning C4244: инициализация: преобразование "unsigned __int64" в "double", возможна потеря данных
+D:\Uni\MSACIT\MSACIT_LWD_1\HolstedtParser\HolstedtParser\HolstedtParser.cpp(66,41): warning C4244: =: преобразование "unsigned __int64" в "double", возможна потеря данных
   HolstedtParser.vcxproj -> D:\Uni\MSACIT\MSACIT_LWD_1\HolstedtParser\x64\Debug\HolstedtParser.exe

@@ -4,88 +4,108 @@
 #include <regex>
 #include <unordered_set>
 #include <cmath>
+#include <map>
 
-using namespace std;
+std::vector<std::map<std::string, int>> parse(std::string filePath)
+{
+    std::string fileContent;
+    char readChar;
 
-unordered_set<string> operators = {
-    "++", "--", "**", "==", "!=", "<=", ">=", "&&", "||", "+=", "-=", "*=", "/=", "%=", "<<=", ">>=", "&=", "|=", "^=",
-    "~", "!", "+", "-", "*", "/", "%", "<<", ">>", "&", "|", "^", "=", "<", ">", "?", ":", "===", "!==", "<>", "->",
-    "::", "and", "or", "xor", "clone", "new", "instanceof", "print", "var", "if", "else", "elseif", "switch", "case",
-    "default", "break", "continue", "while", "do", "for", "foreach", "declare", "return", "try", "throw", "catch",
-    "finally", "function", "const", "abstract", "interface", "extends", "implements", "public", "protected", "private",
-    "static", "final", "namespace", "use", "require", "require_once", "include", "include_once", "global", "goto"
-};
 
-string preprocessCode(const string& code) {
-    // Удаление комментариев
-    string result = regex_replace(code, regex("//.*|/\\*.*?\\*/"), "");
+    std::map<std::string, int> operandDict;
+    std::map<std::string, int> operandDict_;
+    std::map<std::string, int> operatorDict;
+    std::vector<std::map<std::string, int>> dicts;
 
-    // Удаление строковых литералов
-    result = regex_replace(result, regex("\"(?:\\\\.|[^\\\\\"])*\"|'(?:\\\\.|[^\\\\'])*'"), "");
+    std::ifstream phpFile(filePath);
+    if (phpFile.is_open())
+    {
+        while (phpFile.get(readChar))
+            fileContent += readChar;
+    }
+    else
+    {
+        throw std::runtime_error("Valera, put' k failu huyna, peredelivay!");
+    }
+    phpFile.close();
 
-    // Удаление heredoc и nowdoc синтаксиса
-    result = regex_replace(result, regex("<<<['\"]?[A-Za-z_]+['\"]?(?:.|\\n)*?\\n[A-Za-z_]+;"), "");
+    std::regex operandRegex("\\$([_a-zA-Z_][a-zA-Z0-9_]*)");
+    std::regex operatorRegex("\\+\\+|--(?!\\=)|\\*\\*|==|!=|<=|>=|&&|\\|\\||\\+=(?!\\=)|-=\\b(?!\\=)|\\*=(?!\\=)|/=(?!\\=)|%(?!\\=)|<<=|>>=|&=|\\|=|\\^=|~|!(?!\\=)|\\+(?!\\+)|-(?!\\-)|\\*(?!\\=)|/(?!\\=)|%(?!\\=)|<<|>>|&(?!\\=)|\\|(?!\\=)|\\^=|=|<|>|\\?|:|===|!==|<>|->|::\\b|and\\b|or\\b|xor\\b|clone\\b|new\\b|instanceof\\b|print\\b|var\\b|if\\b|else\\b|elseif\\b|switch\\b|case\\b|default\\b|break\\b|continue\\b|while\\b|do\\b|for\\b|foreach\\b|declare\\b|return\\b|try\\b|throw\\b|catch\\b|finally\\b|function\\b|const\\b|abstract\\b|interface\\b|extends\\b|implements\\b|public\\b|protected\\b|private\\b|static\\b|final\\b|namespace\\b|use\\b|require\\b|require_once\\b|include\\b|include_once\\b|global\\b|goto\\b"); ("\\+\\+|--(?!\\=)|\\*\\*|==|!=|<=|>=|&&|\\|\\||\\+=(?!\\=)|-=\\b(?!\\=)|\\*=(?!\\=)|/=(?!\\=)|%(?!\\=)|<<=|>>=|&=|\\|=|\\^=|~|!(?!\\=)|\\+(?!\\+)|-(?!\\-)|\\*(?!\\=)|/(?!\\=)|%(?!\\=)|<<|>>|&(?!\\=)|\\|(?!\\=)|\\^=|=|<|>|\\?|:|===|!==|<>|->|::\\b|and\\b|or\\b|xor\\b|clone\\b|new\\b|instanceof\\b|print\\b|var\\b|if\\b|else\\b|elseif\\b|switch\\b|case\\b|default\\b|break\\b|continue\\b|while\\b|do\\b|for\\b|foreach\\b|declare\\b|return\\b|try\\b|throw\\b|catch\\b|finally\\b|function\\b|const\\b|abstract\\b|interface\\b|extends\\b|implements\\b|public\\b|protected\\b|private\\b|static\\b|final\\b|namespace\\b|use\\b|require\\b|require_once\\b|include\\b|include_once\\b|global\\b|goto\\b");
 
-    return result;
-}
+    std::sregex_iterator operandIter(fileContent.begin(), fileContent.end(), operandRegex);
+    std::sregex_iterator operandEnd;
 
-std::vector<double> calculateHalsteadMetrics(const string& code) {
-    unordered_set<string> uniqueOperators;
-    unordered_set<string> uniqueOperands;
-    regex tokenRegex("\\b\\w+\\b");
-    smatch match;
-
-    // Поиск уникальных операторов и операндов
-    auto tokenIteratorBegin = sregex_iterator(code.begin(), code.end(), tokenRegex);
-    auto tokenIteratorEnd = sregex_iterator();
-
-    for (sregex_iterator it = tokenIteratorBegin; it != tokenIteratorEnd; ++it) {
-        string token = (*it).str();
-        if (operators.find(token) != operators.end()) {
-            uniqueOperators.insert(token);
-        }
-        else {
-            uniqueOperands.insert(token);
-        }
+    for (; operandIter != operandEnd; ++operandIter) {
+        std::string operand = operandIter->str();
+        operandDict_[operand]++;
     }
 
-    // Вычисление метрик Холстедта
-    double programLength = distance(tokenIteratorBegin, tokenIteratorEnd);
-    double vocabularySize = uniqueOperators.size() + uniqueOperands.size();
-    double programVolume = programLength * log2(vocabularySize);
-    double programDifficulty = (uniqueOperators.size() / 2.0) * (uniqueOperands.size() > 0 ? (programLength * 1.0) / uniqueOperands.size() : 0);
-    double programEffort = programVolume * programDifficulty;
-    double programTime = programEffort / 18.0;
+    for (const auto& pair : operandDict_)
+        operandDict[pair.first.substr(1)] = pair.second;
 
-    std::vector<double> metrics = std::vector<double>();
-    metrics.push_back(programLength);
-    metrics.push_back(vocabularySize);
+    std::sregex_iterator operatorIter(fileContent.begin(), fileContent.end(), operatorRegex);
+    std::sregex_iterator operatorEnd;
+
+    for (; operatorIter != operatorEnd; ++operatorIter) {
+        std::string op = operatorIter->str();
+        operatorDict[op]++;
+    }
+
+    dicts.push_back(operandDict);
+    dicts.push_back(operatorDict);
+    return dicts;
+}
+
+std::vector<double> countMetrics(std::vector<std::map<std::string, int>> dicts)
+{
+    double programDictionary = 0;
+    double programLength = 0;
+    double programVolume = 0;
+    std::vector<double> metrics;
+
+    programDictionary = dicts[0].size() + dicts[1].size();
+
+    for (const auto& dict : dicts)
+        for (const auto& val : dict)
+            programLength += val.second;
+
+    programVolume = programLength * log2(programDictionary);
+
+    metrics.push_back(programDictionary);
     metrics.push_back(programLength);
     metrics.push_back(programVolume);
-    metrics.push_back(programDifficulty);
-    metrics.push_back(programEffort);
-    metrics.push_back(programTime);
+
     return metrics;
 }
 
+
 int main() {
-    // Чтение кода из файла
     std::string filePath = "D:\\Uni\\MSACIT\\MSACIT_LWD_1\\example.php";
-   ifstream inputFile(filePath);
-    string code((istreambuf_iterator<char>(inputFile)), istreambuf_iterator<char>());
-    inputFile.close();
+  
+    const auto dicts = parse(filePath);
+    const auto metrics = countMetrics(dicts);
 
-    // Предварительная обработка кода
-    string preprocessedCode = preprocessCode(code);
+    //dicts[0] -- operands  - <str, int>
+    //dicts[1] -- operators - <str, int>
+    //metrics[0] -- program dictionary - double
+    //metrics[1] -- program length - double
+    //metrics[2] -- program volume - double
 
-    // Вычисление метрик Холстедта
-    std::vector<double> metrics = calculateHalsteadMetrics(preprocessedCode);
 
-    // Вывод результатов
-    for (double metric : metrics)
-    {
-        std::cout << metric <<'\n';
-    }
+
+    std::cout << "OPERANDS:\n";
+    for (const auto& entry : dicts[0]) 
+        std::cout << entry.first << ": " << entry.second << "\n";
+
+    std::cout << "\nOPERATORS:\n";
+    for (const auto& entry : dicts[1])
+        std::cout << entry.first << ": " << entry.second << "\n";
+
+    std::cout << "\nSLOVAR PROGRAMMY\n" << metrics[0] << '\n';
+
+    std::cout << "\nDLINA PROGRAMMY\n" << metrics[1] << '\n';
+
+    std::cout << "\nOBYOM PROGRAMMY\n" << metrics[2] << '\n';
 
     return 0;
 }
