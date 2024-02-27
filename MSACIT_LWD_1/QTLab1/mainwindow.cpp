@@ -25,8 +25,8 @@ std::vector<std::map<std::string, int>> MainWindow::parse()
     std::map<std::string, int> operatorDict;
     std::vector<std::map<std::string, int>> dicts;
 
-    std::regex operandRegex("\\$([_a-zA-Z_][a-zA-Z0-9_]*)");
-    std::regex operatorRegex("\\+\\+|--(?!\\=)|\\*\\*|==|!=|<=|>=|&&|\\|\\||\\+=(?!\\=)|-=\\b(?!\\=)|\\*=(?!\\=)|/=(?!\\=)|%(?!\\=)|<<=|>>=|&=|\\|=|\\^=|~|!(?!\\=)|\\+(?!\\+)|-(?!\\-)|\\*(?!\\=)|/(?!\\=)|%(?!\\=)|<<|>>|&(?!\\=)|\\|(?!\\=)|\\^=|=|<|>|\\?|:|===|!==|<>|->|::\\b|and\\b|or\\b|xor\\b|clone\\b|new\\b|instanceof\\b|print\\b|var\\b|if\\b|else\\b|elseif\\b|switch\\b|case\\b|default\\b|break\\b|continue\\b|while\\b|do\\b|for\\b|foreach\\b|declare\\b|return\\b|try\\b|throw\\b|catch\\b|finally\\b|function\\b|const\\b|abstract\\b|interface\\b|extends\\b|implements\\b|public\\b|protected\\b|private\\b|static\\b|final\\b|namespace\\b|use\\b|require\\b|require_once\\b|include\\b|include_once\\b|global\\b|goto\\b"); ("\\+\\+|--(?!\\=)|\\*\\*|==|!=|<=|>=|&&|\\|\\||\\+=(?!\\=)|-=\\b(?!\\=)|\\*=(?!\\=)|/=(?!\\=)|%(?!\\=)|<<=|>>=|&=|\\|=|\\^=|~|!(?!\\=)|\\+(?!\\+)|-(?!\\-)|\\*(?!\\=)|/(?!\\=)|%(?!\\=)|<<|>>|&(?!\\=)|\\|(?!\\=)|\\^=|=|<|>|\\?|:|===|!==|<>|->|::\\b|and\\b|or\\b|xor\\b|clone\\b|new\\b|instanceof\\b|print\\b|var\\b|if\\b|else\\b|elseif\\b|switch\\b|case\\b|default\\b|break\\b|continue\\b|while\\b|do\\b|for\\b|foreach\\b|declare\\b|return\\b|try\\b|throw\\b|catch\\b|finally\\b|function\\b|const\\b|abstract\\b|interface\\b|extends\\b|implements\\b|public\\b|protected\\b|private\\b|static\\b|final\\b|namespace\\b|use\\b|require\\b|require_once\\b|include\\b|include_once\\b|global\\b|goto\\b");
+    std::regex operandRegex("(\\$([_a-zA-Z_][a-zA-Z0-9_]*))|(\\d+)|(true)|(false)|(\"([^\"]*)\")|(\'([^\']*)\')");
+    std::regex operatorRegex("\\[|\\{|\\;|\\+\\+|--(?!\\=)|\\*\\*|==|!=|<=|>=|&&|\\|\\||\\+=(?!\\=)|-=\\b(?!\\=)|\\*=(?!\\=)|/=(?!\\=)|%(?!\\=)|<<=|>>=|&=|\\|=|\\^=|~|!(?!\\=)|\\+(?!\\+)|-(?!\\-)|\\*(?!\\=)|/(?!\\=)|%(?!\\=)|<<|>>|&(?!\\=)|\\|(?!\\=)|\\^=|=|<|>|\\?|:|===|!==|<>|->|::\\b|and\\b|or\\b|xor\\b|clone\\b|new\\b|instanceof\\b|print\\b|var\\b|if\\b|else\\b|elseif\\b|switch\\b|case\\b|default\\b|break\\b|continue\\b|while\\b|do\\b|for\\b|foreach\\b|declare\\b|return\\b|try\\b|throw\\b|catch\\b|finally\\b|function\\b|const\\b|abstract\\b|interface\\b|extends\\b|implements\\b|public\\b|protected\\b|private\\b|static\\b|final\\b|namespace\\b|use\\b|require\\b|require_once\\b|include\\b|include_once\\b|global\\b|goto\\b"); ("\\+\\+|--(?!\\=)|\\*\\*|==|!=|<=|>=|&&|\\|\\||\\+=(?!\\=)|-=\\b(?!\\=)|\\*=(?!\\=)|/=(?!\\=)|%(?!\\=)|<<=|>>=|&=|\\|=|\\^=|~|!(?!\\=)|\\+(?!\\+)|-(?!\\-)|\\*(?!\\=)|/(?!\\=)|%(?!\\=)|<<|>>|&(?!\\=)|\\|(?!\\=)|\\^=|=|<|>|\\?|:|===|!==|<>|->|::\\b|and\\b|or\\b|xor\\b|clone\\b|new\\b|instanceof\\b|print\\b|var\\b|if\\b|else\\b|elseif\\b|switch\\b|case\\b|default\\b|break\\b|continue\\b|while\\b|do\\b|for\\b|foreach\\b|declare\\b|return\\b|try\\b|throw\\b|catch\\b|finally\\b|function\\b|const\\b|abstract\\b|interface\\b|extends\\b|implements\\b|public\\b|protected\\b|private\\b|static\\b|final\\b|namespace\\b|use\\b|require\\b|require_once\\b|include\\b|include_once\\b|global\\b|goto\\b");
 
     std::sregex_iterator operandIter(fileContent.begin(), fileContent.end(), operandRegex);
     std::sregex_iterator operandEnd;
@@ -36,8 +36,9 @@ std::vector<std::map<std::string, int>> MainWindow::parse()
         operandDict_[operand]++;
     }
 
-    for (const auto& pair : operandDict_)
-        operandDict[pair.first.substr(1)] = pair.second;
+    for (const auto& pair : operandDict_){
+        operandDict[pair.first/*.substr(1)*/] = pair.second;
+    }
 
     std::sregex_iterator operatorIter(fileContent.begin(), fileContent.end(), operatorRegex);
     std::sregex_iterator operatorEnd;
@@ -101,7 +102,13 @@ void MainWindow::on_calculateButton_clicked()
         ui->operatorTable->setVerticalHeaderItem(i, item);
         item = new QTableWidgetItem(QString::number(i + 1));
         ui->operatorTable->setItem(i, 0, item);
-        item = new QTableWidgetItem(QString::fromStdString(entry.first));
+        if (entry.first == "["){
+            item = new QTableWidgetItem("[ ]");
+        }
+        else if (entry.first == "{"){
+            item = new QTableWidgetItem("{ }");
+        }
+        else item = new QTableWidgetItem(QString::fromStdString(entry.first));
         ui->operatorTable->setItem(i, 1, item);
         item = new QTableWidgetItem(QString::number(entry.second));
         ui->operatorTable->setItem(i, 2, item);

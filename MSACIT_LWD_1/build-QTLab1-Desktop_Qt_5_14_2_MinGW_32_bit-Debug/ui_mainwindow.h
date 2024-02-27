@@ -34,15 +34,15 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(1053, 600);
+        MainWindow->resize(1260, 590);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         openFileButton = new QPushButton(centralwidget);
         openFileButton->setObjectName(QString::fromUtf8("openFileButton"));
-        openFileButton->setGeometry(QRect(960, 10, 81, 51));
+        openFileButton->setGeometry(QRect(1170, 10, 81, 51));
         calculateButton = new QPushButton(centralwidget);
         calculateButton->setObjectName(QString::fromUtf8("calculateButton"));
-        calculateButton->setGeometry(QRect(960, 70, 81, 51));
+        calculateButton->setGeometry(QRect(1170, 70, 81, 51));
         calculateButton->setMaximumSize(QSize(111, 16777215));
         textBrowser = new QTextBrowser(centralwidget);
         textBrowser->setObjectName(QString::fromUtf8("textBrowser"));
@@ -57,7 +57,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
         operatorTable->setHorizontalHeaderItem(2, __qtablewidgetitem2);
         operatorTable->setObjectName(QString::fromUtf8("operatorTable"));
-        operatorTable->setGeometry(QRect(400, 10, 251, 571));
+        operatorTable->setGeometry(QRect(400, 10, 371, 571));
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -73,7 +73,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
         operandTable->setHorizontalHeaderItem(2, __qtablewidgetitem5);
         operandTable->setObjectName(QString::fromUtf8("operandTable"));
-        operandTable->setGeometry(QRect(660, 10, 291, 571));
+        operandTable->setGeometry(QRect(790, 10, 371, 571));
         sizePolicy.setHeightForWidth(operandTable->sizePolicy().hasHeightForWidth());
         operandTable->setSizePolicy(sizePolicy);
         MainWindow->setCentralWidget(centralwidget);
